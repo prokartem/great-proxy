@@ -29,8 +29,8 @@ ufw status verbose
 echo "============ Install Nomad + Consul ============"
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
-apt-get install consul
 echo "============ Install Consul ============"
+apt-get install consul
 mkdir -p /etc/consul.d
 mkdir -p /opt/consul
 chmod 777 /opt/consul
