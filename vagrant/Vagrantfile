@@ -43,8 +43,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "proxy" do |proxy|
-    proxy.vm.hostname = "eth-proxy-getblock"
+  config.vm.define "proxy1" do |proxy|
+    proxy.vm.hostname = "proxy1"
 
     proxy.vm.network "private_network", type: "dhcp"
 
@@ -52,10 +52,22 @@ Vagrant.configure("2") do |config|
       a.verbose = "v"
       a.playbook = "../ansible/setup_client.yaml"
       a.groups = {
-        "vms" => ["proxy"]
+        "vms" => ["proxy1"]
       }
     end
+  end
 
-    # proxy.vm.synced_folder "~/great-proxy", "/home/vagrant/great-proxy", create: true
+  config.vm.define "proxy2" do |proxy|
+    proxy.vm.hostname = "proxy2"
+
+    proxy.vm.network "private_network", type: "dhcp"
+
+    proxy.vm.provision "ansible" do |a|
+      a.verbose = "v"
+      a.playbook = "../ansible/setup_client.yaml"
+      a.groups = {
+        "vms" => ["proxy2"]
+      }
+    end
   end
 end
