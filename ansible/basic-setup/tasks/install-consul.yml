@@ -1,0 +1,51 @@
+- name: Add Hashicorp key
+  apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Add Hashicorp repository
+  apt_repository: 
+    repo: deb https://apt.releases.hashicorp.com bookworm main
+    state: present
+
+- name: Install Consul
+  apt:
+    name: consul
+    state: latest
+
+- name: Create dir /etc/consul.d
+  ansible.builtin.file:
+    path: /etc/consul.d
+    state: directory
+
+- name: Create dir /opt/consul with mod 777
+  ansible.builtin.file:
+    path: /opt/consul
+    state: directory
+    mode: 0777
+
+- name: Render consul config
+  ansible.builtin.template:
+    src: consul/server.j2
+    dest: /etc/consul.d/consul.hcl
+  when: is_server
+
+- name: Render consul config
+  ansible.builtin.template:
+    src: consul/client.j2
+    dest: /etc/consul.d/consul.hcl
+  when: is_client
+
+- name: Validate config
+  shell: "consul validate /etc/consul.d"
+
+- name: Copy consul service
+  ansible.builtin.copy:
+    src: consul.service
+    dest: /etc/systemd/system/consul.service
+
+- name: Enale and start consul service
+  ansible.builtin.systemd:
+    name: consul
+    state: started
+    enabled: true

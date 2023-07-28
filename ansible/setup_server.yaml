@@ -1,0 +1,8 @@
+- name: Setup host
+  hosts: vms
+  become: true
+  become_method: sudo
+  vars:
+    is_server: true
+  roles:
+    - basic-setup

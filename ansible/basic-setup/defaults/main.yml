@@ -1,0 +1,4 @@
+---
+# defaults file for basic-setup
+is_server: false
+is_client: false

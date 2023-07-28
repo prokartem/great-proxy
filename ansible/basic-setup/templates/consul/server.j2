@@ -2,7 +2,7 @@
 
 data_dir = "/opt/consul"
 
-client_addr = "192.168.56.20" # host ip
+client_addr = "{{ ansible_facts['eth1']['ipv4']['address'] }}" # host ip
 
 ui_config{
  enabled = true
@@ -11,6 +11,6 @@ ui_config{
 server = true
 
 
-bind_addr = "192.168.56.20" # host ip
+bind_addr = "{{ ansible_facts['eth1']['ipv4']['address'] }}" # host ip
 
 bootstrap_expect=1

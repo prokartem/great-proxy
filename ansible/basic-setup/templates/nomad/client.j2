@@ -1,0 +1,10 @@
+#sudo nomad agent -config=/etc/nomad.d/client.hcl -network-interface='eth1'
+
+client {
+  enabled = true
+}
+consul {
+  address = "{{ ansible_facts['eth1']['ipv4']['address'] }}:8500" # host ip 
+}
+data_dir = "/opt/nomad"
+bind_addr = "{{ ansible_facts['eth1']['ipv4']['address'] }}"

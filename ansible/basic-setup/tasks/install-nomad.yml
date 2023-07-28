@@ -1,0 +1,48 @@
+- name: Add Hashicorp key
+  apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Add Hashicorp repository
+  apt_repository: 
+    repo: deb https://apt.releases.hashicorp.com bookworm main
+    state: present
+
+- name: Install Nomad
+  apt:
+    name: nomad
+    state: latest
+
+- name: Create dir /etc/nomad.d
+  ansible.builtin.file:
+    path: /etc/nomad.d
+    state: directory
+
+- name: Create dir /opt/nomad with mod 777
+  ansible.builtin.file:
+    path: /opt/nomad
+    state: directory
+    mode: 0777
+
+- name: Render nomad config
+  ansible.builtin.template:
+    src: nomad/server.j2
+    dest: /etc/nomad.d/nomad.hcl
+  when: is_server
+
+- name: Render nomad config
+  ansible.builtin.template:
+    src: nomad/client.j2
+    dest: /etc/nomad.d/nomad.hcl
+  when: is_client
+
+- name: Copy nomad service
+  ansible.builtin.copy:
+    src: nomad.service
+    dest: /etc/systemd/system/nomad.service
+
+- name: Enale and start consul service
+  ansible.builtin.systemd:
+    name: nomad
+    state: started
+    enabled: true

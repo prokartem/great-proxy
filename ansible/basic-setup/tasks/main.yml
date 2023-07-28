@@ -1,0 +1,18 @@
+---
+# tasks file for basic-setup
+- name: Install required system packages
+  apt:
+    name: 
+      - gnupg
+      - ufw
+    state: latest
+    update_cache: true
+
+- name: Setup ufw rules
+  community.general.ufw:
+    state: enabled
+    policy: allow
+
+- include_tasks: install-docker.yml
+- include_tasks: install-consul.yml
+- include_tasks: install-nomad.yml

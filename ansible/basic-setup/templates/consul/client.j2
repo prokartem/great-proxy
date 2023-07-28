@@ -1,0 +1,7 @@
+#consul agent -config-file=/etc/consul.d/client.hcl
+
+data_dir = "/opt/consul"
+client_addr = "{{ ansible_facts['eth1']['ipv4']['address'] }}" # host ip
+server = false
+bind_addr = "{{ ansible_facts['eth1']['ipv4']['address'] }}" # host ip
+retry_join = ["{{ server_ip }}"] # server ip
