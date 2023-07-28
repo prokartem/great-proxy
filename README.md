@@ -1,3 +1,3 @@
 # Great Proxy
 
-![infra](great_proxy_infra.png)
+![infra](great-proxy-test2.gif)
