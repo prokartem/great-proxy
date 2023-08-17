@@ -1,0 +1,18 @@
+- name: Setup server
+  hosts: servers
+  become: true
+  become_method: sudo
+  vars:
+    is_server: true
+  roles:
+    - basic-setup
+
+- name: Setup client
+  hosts: clients
+  become: true
+  become_method: sudo
+  vars:
+    is_client: true
+    server_ip: "192.168.56.66"
+  roles:
+    - basic-setup

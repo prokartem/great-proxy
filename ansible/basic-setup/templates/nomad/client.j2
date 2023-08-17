@@ -2,7 +2,7 @@
 
 client {
   enabled = true
-  node_pool = "{% if 'proxy' in group_names %}proxy{% endif %}"
+  node_class = "{% if 'proxy' in group_names %}proxy{% endif %}"
 }
 consul {
   address = "{{ ansible_facts['eth1']['ipv4']['address'] }}:8500" # host ip 
