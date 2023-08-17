@@ -1,9 +1,0 @@
-- name: Setup host
-  hosts: vms
-  become: true
-  become_method: sudo
-  vars:
-    is_client: true
-    server_ip: "192.168.56.66"
-  roles:
-    - basic-setup

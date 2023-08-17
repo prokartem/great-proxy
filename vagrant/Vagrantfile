@@ -20,13 +20,13 @@ Vagrant.configure("2") do |config|
 
     main.vm.network "private_network", type: "dhcp"
 
-    main.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.playbook = "../ansible/setup_server.yaml"
-      a.groups = {
-        "vms" => ["main"]
-      }
-    end
+    # main.vm.provision "ansible" do |a|
+    #   a.verbose = "v"
+    #   a.playbook = "../ansible/setup_server.yaml"
+    #   a.groups = {
+    #     "vms" => ["main"]
+    #   }
+    # end
   end
 
   config.vm.define "front" do |front|
@@ -34,13 +34,13 @@ Vagrant.configure("2") do |config|
 
     front.vm.network "private_network", type: "dhcp"
 
-    front.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.playbook = "../ansible/setup_client.yaml"
-      a.groups = {
-        "vms" => ["front"]
-      }
-    end
+    # front.vm.provision "ansible" do |a|
+    #   a.verbose = "v"
+    #   a.playbook = "../ansible/setup_client.yaml"
+    #   a.groups = {
+    #     "vms:service" => ["front"]
+    #   }
+    # end
   end
 
   config.vm.define "proxy1" do |proxy|
@@ -48,13 +48,13 @@ Vagrant.configure("2") do |config|
 
     proxy.vm.network "private_network", type: "dhcp"
 
-    proxy.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.playbook = "../ansible/setup_client.yaml"
-      a.groups = {
-        "vms" => ["proxy1"]
-      }
-    end
+    # proxy.vm.provision "ansible" do |a|
+    #   a.verbose = "v"
+    #   a.playbook = "../ansible/setup_client.yaml"
+    #   a.groups = {
+    #     "vms:proxy" => ["proxy1"]
+    #   }
+    # end
   end
 
   config.vm.define "proxy2" do |proxy|
@@ -62,12 +62,23 @@ Vagrant.configure("2") do |config|
 
     proxy.vm.network "private_network", type: "dhcp"
 
-    proxy.vm.provision "ansible" do |a|
-      a.verbose = "v"
-      a.playbook = "../ansible/setup_client.yaml"
-      a.groups = {
-        "vms" => ["proxy2"]
-      }
-    end
+    # proxy.vm.provision "ansible" do |a|
+    #   a.verbose = "v"
+    #   a.playbook = "../ansible/setup_client.yaml"
+    #   a.groups = {
+    #     "vms:proxy" => ["proxy2"]
+    #   }
+    # end
+  end
+
+  config.vm.provision "ansible" do |a|
+    a.verbose = "v"
+    a.playbook = "../ansible/setup.yaml"
+    a.groups = {
+      "vms:children" => ["servers", "clients", "proxy"],
+      "servers"      => ["main"],
+      "clients"      => ["front", "proxy1", "proxy2"],
+      "proxy"        => ["proxy1", "proxy2"]
+    }
   end
 end
