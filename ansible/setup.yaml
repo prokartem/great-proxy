@@ -13,6 +13,6 @@
   become_method: sudo
   vars:
     is_client: true
-    server_ip: "192.168.56.66"
+    server_ip: "192.168.56.86"
   roles:
     - basic-setup

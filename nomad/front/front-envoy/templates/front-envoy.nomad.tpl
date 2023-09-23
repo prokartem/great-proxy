@@ -2,8 +2,9 @@ job [[ template "job_name" . ]] {
   type = "service"
 
   constraint {
-    attribute = "${node.class}"
-    value     = "proxy"
+    attribute = "${attr.unique.consul.name}"
+    operator  = "="
+    value     = "front-envoy"
   }
 
   group [[ template "job_name" . ]] {
@@ -18,12 +19,19 @@ job [[ template "job_name" . ]] {
     }
 
     service {
-      name = "eth-proxy-[[ .my.node_provider ]]-http"
-      tags = ["proxy", "eth", [[ .my.node_provider | quote ]] ]
+      name = "front-envoy-http"
+      tags = ["front", "envoy" ]
       port = "http"
 
       connect {
-        sidecar_service {}
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "eth-proxy-getblock-http"
+              local_bind_port  = 8080
+            }
+          }
+        }
       }
     }
 
@@ -37,13 +45,13 @@ job [[ template "job_name" . ]] {
 
       template {
         data = <<EOH[[ template "config" . ]]EOH
-        destination = "local/eth-proxy-[[ .my.node_provider ]].yaml"
+        destination = "local/front-envoy.yaml"
       }
 
       config {
         image = "envoyproxy/envoy:v1.26-latest"
         ports = ["http"]
-        volumes = ["local/eth-proxy-[[ .my.node_provider ]].yaml:/etc/envoy/envoy.yaml"]
+        volumes = ["local/front-envoy.yaml:/etc/envoy/envoy.yaml"]
         args  = [
           "--config-path",
           "/etc/envoy/envoy.yaml",

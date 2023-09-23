@@ -5,3 +5,7 @@ client_addr = "{{ ansible_facts['eth1']['ipv4']['address'] }}" # host ip
 server = false
 bind_addr = "{{ ansible_facts['eth1']['ipv4']['address'] }}" # host ip
 retry_join = ["{{ server_ip }}"] # server ip
+
+ports {
+  grpc = 8502
+}
