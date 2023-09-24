@@ -55,3 +55,21 @@ variable "consul_service_tags" {
     "traefik.http.routers.http.rule=Path(`/`)",
   ]
 }
+
+variable "protocols" {
+  description = "A list of protocols"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "name" {
+  description = "Name"
+  type        = string
+  default     = ""
+}
+
+variable "providers" {
+  description = "A list of providers"
+  type        = list(string)
+  default     = []
+}

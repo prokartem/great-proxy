@@ -26,22 +26,14 @@ job [[ template "job_name" . ]] {
       connect {
         sidecar_service {
           proxy {
+            [[- range $protocol := .my.protocols ]]
+              [[- range $id, $provider := $protocol.providers ]]
             upstreams {
-              destination_name = "eth-proxy-getblock-http"
-              local_bind_port  = 8080
+              destination_name = "[[- $protocol.name ]]-proxy-[[- $provider ]]-http"
+              local_bind_port  = [[ add 8081 $id ]]
             }
-            upstreams {
-              destination_name = "eth-proxy-alchemy-http"
-              local_bind_port  = 8081
-            }
-            upstreams {
-              destination_name = "eth-proxy-infura-http"
-              local_bind_port  = 8082
-            }
-            upstreams {
-              destination_name = "eth-proxy-quicknode-http"
-              local_bind_port  = 8083
-            }
+              [[- end ]]        
+            [[- end ]]
           }
         }
       }

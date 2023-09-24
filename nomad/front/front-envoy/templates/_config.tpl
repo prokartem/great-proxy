@@ -32,39 +32,32 @@ static_resources:
             - name: front-proxy
               domains: ["*"]
               routes:
+              [[- range $protocol := .my.protocols ]]
               - match:
-                  prefix: "/"
+                  prefix: "/[[- $protocol.name ]]"
                 route:
-                  cluster: front-proxy
-                
+                  prefix_rewrite: "/"
+                  cluster: [[ $protocol.name ]]-proxy
+              [[- end]]
+
+[[- range $protocol := .my.protocols ]]
   clusters:
-  - name: front-proxy
+  - name: [[ $protocol.name ]]-proxy
     lb_policy: ROUND_ROBIN
     type: STRICT_DNS
     # Comment out the following line to test on v6 networks
     # dns_lookup_family: V4_ONLY
     load_assignment:
-      cluster_name: front-proxy
+      cluster_name: [[ $protocol.name ]]-proxy
       endpoints:
       - lb_endpoints:
+  [[- range $id, $provider := $protocol.providers ]]
         - endpoint:
             address:
               socket_address:
-                address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
-                port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-getblock-http" }}
-        - endpoint:
-            address:
-              socket_address:
-                address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
-                port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-alchemy-http" }}
-        - endpoint:
-            address:
-              socket_address:
-                address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
-                port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-infura-http" }}
-        - endpoint:
-            address:
-              socket_address:
-                address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
-                port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-quicknode-http" }}
+                address: {{ env "NOMAD_UPSTREAM_IP_[[- $protocol.name ]]-proxy-[[- $provider ]]-http" }}
+                port_value: {{ env "NOMAD_UPSTREAM_PORT_[[- $protocol.name ]]-proxy-[[- $provider ]]-http" }}
+  [[- end ]]        
+[[- end ]]
+
 [[ end ]]
