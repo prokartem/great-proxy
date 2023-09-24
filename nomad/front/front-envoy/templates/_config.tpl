@@ -32,6 +32,16 @@ static_resources:
             - name: front-proxy
               domains: ["*"]
               routes:
+              - match:
+                  prefix: "/admin/nomad"
+                route:
+                  prefix_rewrite: "/"
+                  cluster: nomad
+              - match:
+                  prefix: "/admin/consul"
+                route:
+                  prefix_rewrite: "/"
+                  cluster: consul
               [[- range $protocol := .my.protocols ]]
               - match:
                   prefix: "/[[- $protocol.name ]]"
@@ -39,8 +49,36 @@ static_resources:
                   prefix_rewrite: "/"
                   cluster: [[ $protocol.name ]]-proxy
               [[- end]]
-              
+
   clusters:
+  - name: nomad
+    lb_policy: ROUND_ROBIN
+    type: STRICT_DNS
+    # Comment out the following line to test on v6 networks
+    # dns_lookup_family: V4_ONLY
+    load_assignment:
+      cluster_name: nomad
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 192.168.56.86
+                port_value: 4646
+  - name: consul
+    lb_policy: ROUND_ROBIN
+    type: STRICT_DNS
+    # Comment out the following line to test on v6 networks
+    # dns_lookup_family: V4_ONLY
+    load_assignment:
+      cluster_name: consul
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: 192.168.56.86
+                port_value: 8500
 [[- range $protocol := .my.protocols ]]
   - name: [[ $protocol.name ]]-proxy
     lb_policy: ROUND_ROBIN
