@@ -13,7 +13,7 @@ job [[ template "job_name" . ]] {
     network {
       mode = "bridge"
       port "http" {
-        static = 8080
+        static = 80
         to = 8080
       }
     }
@@ -29,6 +29,18 @@ job [[ template "job_name" . ]] {
             upstreams {
               destination_name = "eth-proxy-getblock-http"
               local_bind_port  = 8080
+            }
+            upstreams {
+              destination_name = "eth-proxy-alchemy-http"
+              local_bind_port  = 8081
+            }
+            upstreams {
+              destination_name = "eth-proxy-infura-http"
+              local_bind_port  = 8082
+            }
+            upstreams {
+              destination_name = "eth-proxy-quicknode-http"
+              local_bind_port  = 8083
             }
           }
         }

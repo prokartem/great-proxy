@@ -52,4 +52,19 @@ static_resources:
               socket_address:
                 address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
                 port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-getblock-http" }}
+        - endpoint:
+            address:
+              socket_address:
+                address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
+                port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-alchemy-http" }}
+        - endpoint:
+            address:
+              socket_address:
+                address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
+                port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-infura-http" }}
+        - endpoint:
+            address:
+              socket_address:
+                address: {{ env "NOMAD_UPSTREAM_IP_eth-proxy-getblock-http" }}
+                port_value: {{ env "NOMAD_UPSTREAM_PORT_eth-proxy-quicknode-http" }}
 [[ end ]]

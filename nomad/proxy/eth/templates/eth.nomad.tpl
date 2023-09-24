@@ -11,19 +11,17 @@ job [[ template "job_name" . ]] {
 
     network {
       mode = "bridge"
-      port "http" {
-        static = 8080
-        to = 8080
-      }
     }
 
     service {
       name = "eth-proxy-[[ .my.node_provider ]]-http"
       tags = ["proxy", "eth", [[ .my.node_provider | quote ]] ]
-      port = "http"
+      port = 8080
 
       connect {
-        sidecar_service {}
+        sidecar_service {
+          proxy {}
+        }
       }
     }
 
