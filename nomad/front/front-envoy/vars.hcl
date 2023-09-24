@@ -3,5 +3,9 @@ protocols = [
     {
         name = "eth"
         providers = ["getblock", "alchemy", "infura", "quicknode"]
+    },
+    {
+        name = "bsc"
+        providers = ["getblock", "alchemy", "infura", "quicknode"]
     }
 ]

@@ -26,11 +26,11 @@ job [[ template "job_name" . ]] {
       connect {
         sidecar_service {
           proxy {
-            [[- range $protocol := .my.protocols ]]
-              [[- range $id, $provider := $protocol.providers ]]
+            [[- range $ida, $protocol := .my.protocols ]]
+              [[- range $idb, $provider := $protocol.providers ]]
             upstreams {
               destination_name = "[[- $protocol.name ]]-proxy-[[- $provider ]]-http"
-              local_bind_port  = [[ add 8081 $id ]]
+              local_bind_port  = [[ add 8000 (add (mul $ida 10) $idb) ]]
             }
               [[- end ]]        
             [[- end ]]

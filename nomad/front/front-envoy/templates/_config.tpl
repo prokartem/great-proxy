@@ -39,9 +39,9 @@ static_resources:
                   prefix_rewrite: "/"
                   cluster: [[ $protocol.name ]]-proxy
               [[- end]]
-
-[[- range $protocol := .my.protocols ]]
+              
   clusters:
+[[- range $protocol := .my.protocols ]]
   - name: [[ $protocol.name ]]-proxy
     lb_policy: ROUND_ROBIN
     type: STRICT_DNS
