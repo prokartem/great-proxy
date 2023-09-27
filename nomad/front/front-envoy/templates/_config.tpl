@@ -85,6 +85,8 @@ static_resources:
     type: STRICT_DNS
     # Comment out the following line to test on v6 networks
     # dns_lookup_family: V4_ONLY
+    outlier_detection:
+      consecutive_5xx: 2
     load_assignment:
       cluster_name: [[ $protocol.name ]]-proxy
       endpoints:
